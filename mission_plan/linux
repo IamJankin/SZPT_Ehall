@@ -1,0 +1,20 @@
+
+#!/bin/bash
+ 
+#随机数,表示随机一个30以内的数
+randNum=$(($RANDOM%30))
+ 
+#user 表示当前登陆的用户
+#path /var/spool/cron/crontabs
+#生成crontab 任务配置文件
+#表示在 每天早上8点到8点30分之间，随机一个时间运行填报脚本
+echo $[randNum]" 8 * * * python3 /root/SZPT_Ehall/SZPT_Ehall.py" > /var/spool/cron/root
+#每天晚上12点运行本脚本，以重置随机数randNum，实现每天8点到8点30之间，随机运行填报脚本。
+echo "0 0 * * * /root/SZPT_Ehall/mission_plan/linux" >> /var/spool/cron/root
+
+#设置可执行权限
+chmod 777 /var/spool/cron/root
+#使用crontab 命令添加到定时任务
+crontab /var/spool/cron/root
+#重启服务
+systemctl restart crond
