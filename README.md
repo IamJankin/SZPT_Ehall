@@ -37,23 +37,23 @@ SZPT关于防疫期间学生信息每日线上填报爬虫
 
 
 
-### 自动填报
+## 自动填报
 
-#### Linux填报
+### Linux填报
 
 配置mission_plan目录里的`linux`文件，修改相应路径及时间，添加权限并运行`linux`文件。
 
-注：运行`linux`文件会重置crontab内容，请做好备份，或将crontab的内容写入到`linux`文件中。
+注：运行`linux`文件会重置crontab内容，请做好备份，或将crontab的内容写入到`linux`文件中。  
 
 
 
-#### Windows自动填报
+### Windows自动填报
 
 配置mission_plan目录里的`windows.vbs`文件，修改相应路径。在Windows自带的**任务计划程序**中添加该文件，定时运行以实现自动填报。
 
 
 
-#### Windows开机填报/一键填报
+### Windows开机填报/一键填报
 
 Windows也可以将`windows.vbs`文件放在开机启动项里，Win10路径：`C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp`
 
