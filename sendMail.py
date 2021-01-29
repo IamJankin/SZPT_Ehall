@@ -1,17 +1,18 @@
 # -*- coding:utf-8 -*-
 # smtplib 用于邮件的发信动作
 import smtplib
-from email.mime.text import MIMEText
 # email 用于构建邮件内容
-from email.header import Header
+from email.mime.text import MIMEText
 # 用于构建邮件头
-import time
+from email.header import Header
 # 读取配置文件
 import configparser
+import time,os
 
 #configparser初始化
+dirname = os.path.split(os.path.realpath(__file__))[0]
 config = configparser.ConfigParser()
-config.read("config.ini", encoding="utf-8")
+config.read(dirname + "/config.ini", encoding="utf-8")
 
 def sendMail(subject,info):
     now_time = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))

@@ -10,10 +10,12 @@ import sendMail
 import time
 import requests
 import configparser
+import os
 
 #configparser初始化
+dirname = os.path.split(os.path.realpath(__file__))[0]
 config = configparser.ConfigParser()
-config.read("config.ini", encoding="utf-8")
+config.read(dirname + "/config.ini", encoding="utf-8")
 # 读取用户名密码
 username = config.get("user", "username")
 password = config.get("user", "password")
