@@ -189,10 +189,10 @@ def send_info():
     now_date = time.strftime("%Y-%m-%d",time.localtime())   #获取当前日期
 
     # 判断填报状态
-    if now_date in data['datas']['OPERATE_DATE']:
-        print('[+] 今日已经填报，填报时间：' + data['datas']['OPERATE_DATE'])
+    if now_date in data['datas']['REPORT_DATE']:	#Replace OPERATE_DATE with REPORT_DATE
+        print('[+] 今日已经填报，填报时间：' + data['datas']['REPORT_DATE'])
         if config.getboolean("mail","repeat_prompt") == True:
-            sendMail.sendMail('SZPT - 今日已填报 - 每日填报通知','今日已经填报，填报时间：' + data['datas']['OPERATE_DATE'])
+            sendMail.sendMail('SZPT - 今日已填报 - 每日填报通知','今日已经填报，填报时间：' + data['datas']['REPORT_DATE'])
 
     else:
         # 提交信息
