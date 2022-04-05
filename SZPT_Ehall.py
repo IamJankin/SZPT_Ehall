@@ -180,34 +180,45 @@ def send_info():
     response = opener.open(request)
     data = json.loads(response.read().decode('utf-8'))
     # print(data)
-    # update 每日首次提交表单会缺失以下数据
-    temp_dict = {
-        "WID": "", "ZSDZ": "", "SXFS": "", "SFZZSXDWSS": "", "FSSJ": "", "FXSJ": "", "SSSQ": "", "XSQBDSJ": "",
-        "JSJJGCJTSJ": "", "JSJTGCJTSJ": "", "JSJJJTGCYY": "", "STYCZK": "", "STYXZK": ""
-    }
-    data['datas'].update(temp_dict)
-    now_date = time.strftime("%Y-%m-%d",time.localtime())   #获取当前日期
+    
+    if 'WID' in data['datas'] and config.getboolean("other","repeat_report") == False:
+        print('[*] 今日已填报，不再重复填报')
+    else:
+        # update 每日首次提交表单会缺失以下数据
+        temp_dict = {
+            "ZSDZ": "", "FSSJ": "", "FXSJ": "", "SSSQ": "", "XSQBDSJ": "",
+            "JSJJGCJTSJ": "", "JSJTGCJTSJ": "", "JSJJJTGCYY": "", "STYCZK": "", "STYXZK": ""
+        }
+        data['datas'].update(temp_dict)
+        if 'WID' not in data['datas']:      #每日首次提交，WID为空
+            data['datas']['WID']=""
+        if 'HSJCJG' not in data['datas']:   #如果没有核酸检测记录，则HSJCJG为空
+            data['datas']['HSJCJG']=""
+        if 'SXFS' not in data['datas']:     #如果没有在实习，则SXFS与SFZZSXDWSS为空
+            data['datas']['SXFS']=""
+        if 'SFZZSXDWSS' not in data['datas']:
+            data['datas']['SFZZSXDWSS']=""
 
-    # 提交信息
-    params = {
-        'formData': data['datas']
-    }
+        # 提交信息
+        params = {
+            'formData': data['datas']
+        }
 
-    request = urllib.request.Request(url=SAVE_INFO_POST_URL,
-                                     data=urllib.parse.urlencode(params).encode(encoding='UTF-8'),
-                                     method='POST', headers=header_getinfo)
-    response = opener.open(request)
+        request = urllib.request.Request(url=SAVE_INFO_POST_URL,
+                                         data=urllib.parse.urlencode(params).encode(encoding='UTF-8'),
+                                         method='POST', headers=header_getinfo)
+        response = opener.open(request)
 
-    try:
-        # 判断是否提交成功
-        result_json = json.loads(response.read().decode('utf-8'))
-        if result_json["code"] == "0":
-            print("[+] 填报成功")
-            sendMail.sendMail('SZPT - 填报成功 - 每日填报通知',"填报成功")
+        try:
+            # 判断是否提交成功
+            result_json = json.loads(response.read().decode('utf-8'))
+            if result_json["code"] == "0":
+                print("[+] 填报成功")
+                sendMail.sendMail('SZPT - 填报成功 - 每日填报通知',"填报成功")
 
-    except:
-        print('[-] 已填报或需手动更新表单（以往表单数据不可用）')
-        sendMail.sendMail('SZPT - 已填报或需手动更新表单 - 每日填报通知',"已填报或需手动更新表单（以往表单数据不可用）")
+        except:
+            print('[-] 已填报或需手动更新表单（以往表单数据不可用）')
+            sendMail.sendMail('SZPT - 已填报或需手动更新表单 - 每日填报通知',"已填报或需手动更新表单（以往表单数据不可用）")
 
 def main():
     if config.getint("other", "time_sleep") != 0:
